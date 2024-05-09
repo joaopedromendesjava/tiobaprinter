@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TiobaprinterBackendApplication {
+public class TiObaPrinterBackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TiobaprinterBackendApplication.class, args);
+		SpringApplication.run(TiObaPrinterBackendApplication.class, args);
 	}
 
 }
