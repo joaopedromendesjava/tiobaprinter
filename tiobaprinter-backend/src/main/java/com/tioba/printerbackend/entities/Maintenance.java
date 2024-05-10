@@ -12,6 +12,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -36,9 +38,11 @@ public class Maintenance implements Serializable{
 	@Column(name = "end_warranty")
 	private LocalDate endWarranty;
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-	private Instant created_At;
+	private Instant created_At = Instant.now();
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updated_At;
 	
@@ -106,10 +110,6 @@ public class Maintenance implements Serializable{
 
 	public Instant getCreated_At() {
 		return created_At;
-	}
-
-	public void setCreated_At(Instant created_At) {
-		this.created_At = created_At;
 	}
 
 	public Instant getUpdated_At() {
