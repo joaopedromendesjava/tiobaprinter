@@ -3,7 +3,9 @@ package com.tioba.printerbackend.entities;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -13,6 +15,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -44,6 +47,9 @@ public class Printer implements Serializable{
 	@JsonIgnore
 	@OneToMany(mappedBy = "printer", cascade = CascadeType.ALL)
 	List<Maintenance> maintenances = new ArrayList<>();
+	
+	@ManyToMany(mappedBy = "printers")
+	private Set<Toner> toners = new HashSet<>();
 	
 	public Printer() {
 	
@@ -100,6 +106,10 @@ public class Printer implements Serializable{
 	
 	public List<Maintenance> getMaintenances() {
 		return maintenances;
+	}
+	
+	public Set<Toner> getToners() {
+		return toners;
 	}
 
 	@Override
