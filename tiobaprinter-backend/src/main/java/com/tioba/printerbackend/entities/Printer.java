@@ -2,12 +2,18 @@ package com.tioba.printerbackend.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotEmpty;
@@ -34,6 +40,10 @@ public class Printer implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updated_At;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "printer", cascade = CascadeType.ALL)
+	List<Maintenance> maintenances = new ArrayList<>();
 	
 	public Printer() {
 	
@@ -86,6 +96,10 @@ public class Printer implements Serializable{
 
 	public void setUpdated_At(Instant updated_At) {
 		this.updated_At = updated_At;
+	}
+	
+	public List<Maintenance> getMaintenances() {
+		return maintenances;
 	}
 
 	@Override

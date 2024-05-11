@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,10 +51,18 @@ public class PrinterResource {
 		
 	}
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<PrinterDTO> updatePrinter(@PathVariable(value = "id") Long id, @RequestBody PrinterDTO printerDTO){
+	public ResponseEntity<PrinterDTO> updatePrinterId(@PathVariable(value = "id") Long id, @RequestBody PrinterDTO printerDTO){
 		
-		printerDTO = printerService.updatePrinter(id, printerDTO);
+		printerDTO = printerService.updatePrinterId(id, printerDTO);
 		return ResponseEntity.ok().body(printerDTO);
+	}
+	
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<Void> deletePrinter(@PathVariable(value = "id") Long id){
+		
+		printerService.deletePrinterId(id);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 }

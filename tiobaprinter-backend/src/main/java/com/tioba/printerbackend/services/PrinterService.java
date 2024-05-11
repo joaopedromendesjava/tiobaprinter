@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ public class PrinterService {
 	public PrinterDTO getByIdPrinter(Long id) {
 		
 		Printer printer = printerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not valid"));
-		return new PrinterDTO(printer);
+		return new PrinterDTO(printer, printer.getMaintenances());
 	}
 	@Transactional
 	public PrinterDTO insertPrinter(PrinterDTO printerDTO) {
@@ -41,20 +42,31 @@ public class PrinterService {
 		Printer printer = new Printer();
 		copyDtoToPrinter(printerDTO, printer);
 		printerRepository.save(printer);
-		return new PrinterDTO(printer);
+		return new PrinterDTO(printer, printer.getMaintenances());
 	}
 	@Transactional
-	public PrinterDTO updatePrinter(Long id, PrinterDTO printerDTO) {
+	public PrinterDTO updatePrinterId(Long id, PrinterDTO printerDTO) {
 		
 		try {
 			Printer printer = printerRepository.getReferenceById(id);
 			printerDTO.setUpdated_At(Instant.now());
 			copyDtoToPrinter(printerDTO, printer);
 			printer = printerRepository.save(printer);
-			return new PrinterDTO(printer);
+			return new PrinterDTO(printer, printer.getMaintenances());
 		
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id not found " + id);
+		}
+	}
+	public void deletePrinterId(Long id) {
+		try {
+			if (!printerRepository.existsById(id)) {
+				throw new ResourceNotFoundException("Id not found " + id);
+			}else {
+				printerRepository.deleteById(id);
+			}
+		}catch (DataIntegrityViolationException e) {
+			throw new ResourceNotFoundException("Integrity Violation " +id );
 		}
 	}
 	

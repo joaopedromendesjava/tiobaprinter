@@ -2,7 +2,10 @@ package com.tioba.printerbackend.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.tioba.printerbackend.entities.Maintenance;
 import com.tioba.printerbackend.entities.Printer;
 
 public class PrinterDTO implements Serializable{
@@ -13,6 +16,8 @@ public class PrinterDTO implements Serializable{
 	private String model;
 	private Double price;
 	private Instant updated_At;
+	
+	private List<MaintenanceDTO> maintenances = new ArrayList<>(); 
 	
 	public PrinterDTO() {
 
@@ -30,6 +35,11 @@ public class PrinterDTO implements Serializable{
 		this.model = printer.getModel();
 		this.price = printer.getPrice();
 		this.updated_At = printer.getUpdated_At();
+	}
+	
+	public PrinterDTO(Printer printer, List<Maintenance> maintenances) {
+		this(printer);
+		maintenances.forEach(m -> this.maintenances.add(new MaintenanceDTO(m)));
 	}
 
 	public Long getId() {
