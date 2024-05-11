@@ -32,7 +32,7 @@ public class MaintenanceService {
 	public List<MaintenanceDTO> allMaintenances(){
 		
 		 List<Maintenance> maintenances = maintenanceRepository.findAll();
-		 List<MaintenanceDTO> maintenanceDTOs = maintenances.stream().map(p -> new MaintenanceDTO(p)).toList();
+		 List<MaintenanceDTO> maintenanceDTOs = maintenances.stream().map(p -> new MaintenanceDTO(p, p.getPrinter())).toList();
 		
 		return maintenanceDTOs;
 	}
