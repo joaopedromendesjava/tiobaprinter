@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tioba.printerbackend.dto.PrinterDTO;
 import com.tioba.printerbackend.entities.Printer;
 import com.tioba.printerbackend.repositories.PrinterRepository;
+import com.tioba.printerbackend.services.exceptions.ResourceNotFoundException;
 
 
 @Service
@@ -25,10 +26,10 @@ public class PrinterService {
 		
 		return printerDTOs;
 	}
-	
+	@Transactional(readOnly = true)
 	public PrinterDTO getByIdPrinter(Long id) {
 		
-		Printer printer = printerRepository.findById(id).orElseThrow(() -> new RuntimeException("Not Found"));
+		Printer printer = printerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not valid"));
 		return new PrinterDTO(printer);
 	}
 	
