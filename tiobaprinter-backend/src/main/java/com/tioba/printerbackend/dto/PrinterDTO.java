@@ -7,38 +7,41 @@ import java.util.List;
 
 import com.tioba.printerbackend.entities.Maintenance;
 import com.tioba.printerbackend.entities.Printer;
+import com.tioba.printerbackend.entities.PrinterModel;
 
 public class PrinterDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
-	private String model;
 	private Double price;
 	private Instant updated_At;
+	private Integer status;
 	
 	private List<MaintenanceDTO> maintenances = new ArrayList<>(); 
+	private PrinterModel model;
 	
 	public PrinterDTO() {
 
 	}
 
-	public PrinterDTO(Long id, String model, Double price, Instant updated_At) {
+	public PrinterDTO(Long id, PrinterModel model, Double price, Instant updated_At, Integer status) {
 		this.id = id;
-		this.model = model;
 		this.price = price;
 		this.updated_At = updated_At;
+		this.status = status;
 	}
 	
 	public PrinterDTO(Printer printer) {
 		this.id = printer.getId();
-		this.model = printer.getModel();
 		this.price = printer.getPrice();
 		this.updated_At = printer.getUpdated_At();
+		this.status = printer.getStatus();
 	}
 	
-	public PrinterDTO(Printer printer, List<Maintenance> maintenances) {
+	public PrinterDTO(Printer printer, List<Maintenance> maintenances, PrinterModel model) {
 		this(printer);
+		this.setModel(model);
 		maintenances.forEach(m -> this.maintenances.add(new MaintenanceDTO(m)));
 	}
 
@@ -50,11 +53,11 @@ public class PrinterDTO implements Serializable{
 		this.id = id;
 	}
 
-	public String getModel() {
+	public PrinterModel getModel() {
 		return model;
 	}
 
-	public void setModel(String model) {
+	public void setModel(PrinterModel model) {
 		this.model = model;
 	}
 
@@ -72,5 +75,13 @@ public class PrinterDTO implements Serializable{
 
 	public void setUpdated_At(Instant updated_At) {
 		this.updated_At = updated_At;
+	}
+	
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	
+	public Integer getStatus() {
+		return status;
 	}
 }

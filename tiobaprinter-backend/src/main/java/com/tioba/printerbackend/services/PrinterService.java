@@ -34,7 +34,7 @@ public class PrinterService {
 	public PrinterDTO getByIdPrinter(Long id) {
 		
 		Printer printer = printerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not valid"));
-		return new PrinterDTO(printer, printer.getMaintenances());
+		return new PrinterDTO(printer, printer.getMaintenances(), printer.getModel());
 	}
 	@Transactional
 	public PrinterDTO insertPrinter(PrinterDTO printerDTO) {
@@ -42,7 +42,7 @@ public class PrinterService {
 		Printer printer = new Printer();
 		copyDtoToPrinter(printerDTO, printer);
 		printerRepository.save(printer);
-		return new PrinterDTO(printer, printer.getMaintenances());
+		return new PrinterDTO(printer, printer.getMaintenances(), printer.getModel());
 	}
 	@Transactional
 	public PrinterDTO updatePrinterId(Long id, PrinterDTO printerDTO) {
@@ -52,7 +52,7 @@ public class PrinterService {
 			printerDTO.setUpdated_At(Instant.now());
 			copyDtoToPrinter(printerDTO, printer);
 			printer = printerRepository.save(printer);
-			return new PrinterDTO(printer, printer.getMaintenances());
+			return new PrinterDTO(printer, printer.getMaintenances(), printer.getModel());
 		
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id not found " + id);

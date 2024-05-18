@@ -1,19 +1,13 @@
 package com.tioba.printerbackend.entities;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "toner")
@@ -23,27 +17,20 @@ public class Toner {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotEmpty
-	@NotNull
-	private String model;
-	
-	@ManyToMany
-	@JoinTable(
-		name = "printer_toner",
-		joinColumns = @JoinColumn(name = "toner_id") ,
-		foreignKey = @ForeignKey(name = "toner_id_fk"),
-		inverseJoinColumns = @JoinColumn(name = "printer_id"),
-		inverseForeignKey = @ForeignKey(name = "printer_id_fk")
-			)
-	Set<Printer> printers = new HashSet<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "model_id")
+	private TonerModel model;
+
+	private Long codeRef;
 	
 	public Toner() {
 	
 	}
 
-	public Toner(Long id, @NotEmpty @NotNull String model) {
+	public Toner(Long id, TonerModel model, Long codeRef) {
 		this.id = id;
 		this.model = model;
+		this.codeRef = codeRef;
 	}
 
 	public Long getId() {
@@ -54,12 +41,20 @@ public class Toner {
 		this.id = id;
 	}
 
-	public String getModel() {
+	public TonerModel getModel() {
 		return model;
 	}
 
-	public void setModel(String model) {
+	public void setModel(TonerModel model) {
 		this.model = model;
+	}
+
+	public Long getCodeRef() {
+		return codeRef;
+	}
+
+	public void setCodeRef(Long codeRef) {
+		this.codeRef = codeRef;
 	}
 
 	@Override

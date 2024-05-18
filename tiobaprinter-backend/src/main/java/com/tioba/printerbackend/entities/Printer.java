@@ -3,19 +3,19 @@ package com.tioba.printerbackend.entities;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -31,9 +31,6 @@ public class Printer implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
-	@NotEmpty(message = "model is not empty")
-	private String model;
 	private Double price;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -43,25 +40,29 @@ public class Printer implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updated_At;
+	private Integer status;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "printer", cascade = CascadeType.ALL)
 	List<Maintenance> maintenances = new ArrayList<>();
 	
-	@ManyToMany(mappedBy = "printers")
-	private Set<Toner> toners = new HashSet<>();
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "model_id")
+	private PrinterModel model;
+	
 	
 	public Printer() {
 	
 	}
 
-	public Printer(Long id, @NotNull @NotEmpty(message = "model is not empty") String model, Double price,
-			Instant created_At, Instant updated_At) {
+	public Printer(Long id, @NotNull @NotEmpty(message = "model is not empty") PrinterModel model, Double price,
+			Instant created_At, Instant updated_At, Integer status) {
 		this.id = id;
 		this.model = model;
 		this.price = price;
 		this.created_At = created_At;
 		this.updated_At = updated_At;
+		this.status = status;
 	}
 
 	public Long getId() {
@@ -72,11 +73,11 @@ public class Printer implements Serializable{
 		this.id = id;
 	}
 
-	public String getModel() {
+	public PrinterModel getModel() {
 		return model;
 	}
-
-	public void setModel(String model) {
+	
+	public void setModel(PrinterModel model) {
 		this.model = model;
 	}
 
@@ -104,14 +105,18 @@ public class Printer implements Serializable{
 		this.updated_At = updated_At;
 	}
 	
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	
+	public Integer getStatus() {
+		return status;
+	}
+	
 	public List<Maintenance> getMaintenances() {
 		return maintenances;
 	}
 	
-	public Set<Toner> getToners() {
-		return toners;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
