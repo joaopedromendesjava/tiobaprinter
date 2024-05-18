@@ -1,10 +1,12 @@
 package com.tioba.printerbackend.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -17,22 +19,24 @@ public class PrinterToner {
 	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "printer_id")
 	private Printer printer;
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "toner_id")
 	private Toner toner;
 	
-	private Integer using;
+	private Integer status;
 	
 	public PrinterToner() {
 	
 	}
 
-	public PrinterToner(Integer id, Printer printer, Toner toner, Integer using) {
+	public PrinterToner(Integer id, Printer printer, Toner toner, Integer status) {
 		this.id = id;
 		this.printer = printer;
 		this.toner = toner;
-		this.using = using;
+		this.status = status;
 	}
 
 
@@ -60,12 +64,12 @@ public class PrinterToner {
 		this.toner = toner;
 	}
 
-	public Integer getUsing() {
-		return using;
+	public Integer getstatus() {
+		return status;
 	}
 
-	public void setUsing(Integer using) {
-		this.using = using;
+	public void setstatus(Integer status) {
+		this.status = status;
 	}
 	
 	
