@@ -2,14 +2,20 @@ package com.tioba.printerbackend.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.tioba.printerbackend.entities.enums.StatusPrinter;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,32 +37,33 @@ public class Printer implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private Double price;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-	private Instant created_At = Instant.now();
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-	private Instant updated_At;
-	private Integer status;
-	
-	@JsonIgnore
-	@OneToMany(mappedBy = "printer", cascade = CascadeType.ALL)
-	List<Maintenance> maintenances = new ArrayList<>();
-	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "model_id")
 	private PrinterModel model;
 	
+	private Double price;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
+	private StatusPrinter status;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@UpdateTimestamp(source = SourceType.DB)
+	private Instant updated_At;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreationTimestamp(source = SourceType.DB)
+	private Instant created_At = Instant.now();
+	
+	@OneToMany(mappedBy = "printer", cascade = CascadeType.ALL)
+	Set<MaintenanceOrder> maintenancesOrders = new HashSet<>();
 	
 	public Printer() {
 	
 	}
 
 	public Printer(Long id, @NotNull @NotEmpty(message = "model is not empty") PrinterModel model, Double price,
-			Instant created_At, Instant updated_At, Integer status) {
+			Instant created_At, Instant updated_At, StatusPrinter status) {
 		this.id = id;
 		this.model = model;
 		this.price = price;
@@ -105,16 +112,16 @@ public class Printer implements Serializable{
 		this.updated_At = updated_At;
 	}
 	
-	public void setStatus(Integer status) {
+	public void setStatus(StatusPrinter status) {
 		this.status = status;
 	}
 	
-	public Integer getStatus() {
+	public StatusPrinter getStatus() {
 		return status;
 	}
 	
-	public List<Maintenance> getMaintenances() {
-		return maintenances;
+	public Set<MaintenanceOrder> getMaintenances() {
+		return maintenancesOrders;
 	}
 	
 	@Override

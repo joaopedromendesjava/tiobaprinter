@@ -24,7 +24,7 @@ public class PrinterModel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@NotNull
 	@NotEmpty(message = "name to model is not empty")
@@ -41,16 +41,16 @@ public class PrinterModel {
 	
 	}
 
-	public PrinterModel(Integer id, @NotNull @NotEmpty(message = "name to model is not empty") String name ) {
+	public PrinterModel(Long id, @NotNull @NotEmpty(message = "name to model is not empty") String name ) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

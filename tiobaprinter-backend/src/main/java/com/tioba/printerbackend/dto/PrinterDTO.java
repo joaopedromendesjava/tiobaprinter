@@ -2,12 +2,13 @@ package com.tioba.printerbackend.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.tioba.printerbackend.entities.Maintenance;
+import com.tioba.printerbackend.entities.MaintenanceOrder;
 import com.tioba.printerbackend.entities.Printer;
 import com.tioba.printerbackend.entities.PrinterModel;
+import com.tioba.printerbackend.entities.enums.StatusPrinter;
 
 public class PrinterDTO implements Serializable{
 
@@ -16,33 +17,34 @@ public class PrinterDTO implements Serializable{
 	private Long id;
 	private Double price;
 	private Instant updated_At;
-	private Integer status;
-	
-	private List<MaintenanceDTO> maintenances = new ArrayList<>(); 
+	private StatusPrinter status;
+	private Set<MaintenanceOrderDTO> maintenances = new HashSet<>();
 	private PrinterModel model;
 	
 	public PrinterDTO() {
 
 	}
 
-	public PrinterDTO(Long id, PrinterModel model, Double price, Instant updated_At, Integer status) {
+	public PrinterDTO(Long id, PrinterModel model, Double price, Instant updated_At, StatusPrinter status) {
 		this.id = id;
 		this.price = price;
-		this.updated_At = updated_At;
+	//	this.updated_At = updated_At;
 		this.status = status;
+		this.model = model;
 	}
 	
 	public PrinterDTO(Printer printer) {
 		this.id = printer.getId();
 		this.price = printer.getPrice();
-		this.updated_At = printer.getUpdated_At();
+		//this.updated_At = printer.getUpdated_At();
 		this.status = printer.getStatus();
+		this.model = printer.getModel();
 	}
 	
-	public PrinterDTO(Printer printer, List<Maintenance> maintenances, PrinterModel model) {
+	public PrinterDTO(Printer printer, Set<MaintenanceOrder> maintenances, PrinterModel model) {
 		this(printer);
 		this.setModel(model);
-		maintenances.forEach(m -> this.maintenances.add(new MaintenanceDTO(m)));
+		maintenances.forEach(m -> this.maintenances.add(new MaintenanceOrderDTO(m)));
 	}
 
 	public Long getId() {
@@ -77,11 +79,12 @@ public class PrinterDTO implements Serializable{
 		this.updated_At = updated_At;
 	}
 	
-	public void setStatus(Integer status) {
+	public void setStatus(StatusPrinter status) {
 		this.status = status;
 	}
 	
-	public Integer getStatus() {
+	public StatusPrinter getStatus() {
 		return status;
 	}
+	
 }

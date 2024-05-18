@@ -8,8 +8,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tioba.printerbackend.dto.MaintenanceDTO;
-import com.tioba.printerbackend.entities.Maintenance;
+import com.tioba.printerbackend.dto.MaintenanceOrderDTO;
+import com.tioba.printerbackend.entities.MaintenanceOrder;
 import com.tioba.printerbackend.entities.Printer;
 import com.tioba.printerbackend.repositories.MaintenanceRepository;
 import com.tioba.printerbackend.repositories.PrinterRepository;
@@ -17,7 +17,6 @@ import com.tioba.printerbackend.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-
 
 @Service
 public class MaintenanceService {
@@ -29,36 +28,36 @@ public class MaintenanceService {
 	private PrinterRepository printerRepository;
 	
 	@Transactional(readOnly = true)
-	public List<MaintenanceDTO> allMaintenances(){
+	public List<MaintenanceOrderDTO> allMaintenances(){
 		
-		 List<Maintenance> maintenances = maintenanceRepository.findAll();
-		 List<MaintenanceDTO> maintenanceDTOs = maintenances.stream().map(p -> new MaintenanceDTO(p, p.getPrinter())).toList();
+		 List<MaintenanceOrder> maintenances = maintenanceRepository.findAll();
+		 List<MaintenanceOrderDTO> maintenanceOrderDTOs = maintenances.stream().map(p -> new MaintenanceOrderDTO(p, p.getPrinter())).toList();
 		
-		return maintenanceDTOs;
+		return maintenanceOrderDTOs;
 	}
 	@Transactional(readOnly = true)
-	public MaintenanceDTO getByIdMaintenance(Long id) {
+	public MaintenanceOrderDTO getByIdMaintenance(Long id) {
 		
-		Maintenance maintenance = maintenanceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not valid"));
-		return new MaintenanceDTO(maintenance, maintenance.getPrinter());
+		MaintenanceOrder maintenanceOrder = maintenanceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not valid"));
+		return new MaintenanceOrderDTO(maintenanceOrder, maintenanceOrder.getPrinter());
 	}
 	@Transactional
-	public MaintenanceDTO insertMaintenance(@Valid MaintenanceDTO maintenanceDTO) {
+	public MaintenanceOrderDTO insertMaintenance(@Valid MaintenanceOrderDTO maintenanceOrderDTO) {
 		
-		Maintenance maintenance = new Maintenance();
-		copyDtoToMaintenance(maintenanceDTO, maintenance);
-		maintenanceRepository.save(maintenance);
-		return new MaintenanceDTO(maintenance, maintenance.getPrinter());
+		MaintenanceOrder maintenanceOrder = new MaintenanceOrder();
+		copyDtoToMaintenance(maintenanceOrderDTO, maintenanceOrder);
+		maintenanceRepository.save(maintenanceOrder);
+		return new MaintenanceOrderDTO(maintenanceOrder, maintenanceOrder.getPrinter());
 	}
 	@Transactional
-	public MaintenanceDTO updateMaintenanceId(Long id, MaintenanceDTO maintenanceDTO) {
+	public MaintenanceOrderDTO updateMaintenanceId(Long id, MaintenanceOrderDTO maintenanceOrderDTO) {
 		
 		try {
-			Maintenance maintenance = maintenanceRepository.getReferenceById(id);
-			maintenanceDTO.setUpdated_At(Instant.now());
-			copyDtoToMaintenance(maintenanceDTO, maintenance);
-			maintenance = maintenanceRepository.save(maintenance);
-			return new MaintenanceDTO(maintenance, maintenance.getPrinter());
+			MaintenanceOrder maintenanceOrder = maintenanceRepository.getReferenceById(id);
+			maintenanceOrder.setUpdated_At(Instant.now());
+			copyDtoToMaintenance(maintenanceOrderDTO, maintenanceOrder);
+			maintenanceOrder = maintenanceRepository.save(maintenanceOrder);
+			return new MaintenanceOrderDTO(maintenanceOrder, maintenanceOrder.getPrinter());
 		
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Id not found " + id);
@@ -76,16 +75,15 @@ public class MaintenanceService {
 		}
 	}
 	
-	public void copyDtoToMaintenance(MaintenanceDTO dto, Maintenance maintenance) {
-		maintenance.setEndWarranty(dto.getEndWarranty());
-		maintenance.setMaitenanceShippingDate(dto.getMaitenanceShippingDate());
-		maintenance.setText(dto.getText());
-		maintenance.setPrice(dto.getPrice());
-		maintenance.setUpdated_At(dto.getUpdated_At());
+	public void copyDtoToMaintenance(MaintenanceOrderDTO dto, MaintenanceOrder maintenanceOrder) {
+		maintenanceOrder.setCloseDate(dto.getCloseDate());
+		maintenanceOrder.setDescription(dto.getDescription());
+		maintenanceOrder.setOpeningDate(dto.getOpeningDate());
+		maintenanceOrder.setStatus(dto.getStatus());
 		
 		Printer printer = printerRepository.findById(dto.getPrinter().getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Id not valid"));
-		maintenance.setPrinter(printer);
+		maintenanceOrder.setPrinter(printer);
 		
 	}
 }

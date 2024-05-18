@@ -1,8 +1,8 @@
 package com.tioba.printerbackend.entities;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,7 +24,7 @@ public class TonerModel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@NotNull
 	@NotEmpty(message = "name to model is not empty")
@@ -35,22 +35,22 @@ public class TonerModel {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "model", cascade = CascadeType.ALL)
-	private List<Toner> toners = new ArrayList<>();
+	private Set<Toner> toners = new HashSet<>();
 	
 	public TonerModel() {
 	
 	}
 
-	public TonerModel(Integer id, @NotNull @NotEmpty(message = "name to model is not empty") String name ) {
+	public TonerModel(Long id, @NotNull @NotEmpty(message = "name to model is not empty") String name ) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -70,7 +70,7 @@ public class TonerModel {
 		this.created_At = created_At;
 	}
 
-	public List<Toner> getPrinters() {
+	public Set<Toner> getPrinters() {
 		return toners;
 	}
 }

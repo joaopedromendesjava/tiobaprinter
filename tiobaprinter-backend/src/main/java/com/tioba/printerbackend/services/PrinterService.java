@@ -73,6 +73,7 @@ public class PrinterService {
 	public void copyDtoToPrinter(PrinterDTO dto, Printer printer) {
 		printer.setModel(dto.getModel());
 		printer.setPrice(dto.getPrice());
+		printer.setStatus(dto.getStatus());
 		printer.setUpdated_At(dto.getUpdated_At());
 	}
 

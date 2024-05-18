@@ -12,12 +12,12 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "departments")
+@Table(name = "department")
 public class Department {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@NotNull
 	@NotEmpty(message = "name to department is not empty")
@@ -31,18 +31,18 @@ public class Department {
 	
 	}
 
-	public Department(Integer id, @NotNull @NotEmpty(message = "name to department is not empty") String name,
+	public Department(Long id, @NotNull @NotEmpty(message = "name to department is not empty") String name,
 			Company company) {
 		this.id = id;
 		this.name = name;
 		this.company = company;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

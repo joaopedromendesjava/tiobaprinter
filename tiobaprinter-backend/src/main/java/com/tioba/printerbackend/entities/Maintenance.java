@@ -3,7 +3,10 @@ package com.tioba.printerbackend.entities;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,8 +17,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Maintenance implements Serializable{
@@ -25,47 +26,43 @@ public class Maintenance implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@ManyToOne
+	@JoinColumn(name = "maintenance_order_id")
+	private MaintenanceOrder maintenanceOrder;
 	
-	@NotNull
-	@NotEmpty(message = "Description is not empty")
-	@Column(columnDefinition = "TEXT")
-	private String text;
-	private Double price;
+	private Double totalValue;
 	
-	@Column(name = "maintenance_shipping_date")
-	private LocalDateTime maitenanceShippingDate;
+	@Column(name = "maintenance_date")
+	@Temporal(TemporalType.DATE)
+	private LocalDate maintenanceDate;
 	
 	@Column(name = "end_warranty")
+	@Temporal(TemporalType.DATE)
 	private LocalDate endWarranty;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
-	private Instant created_At = Instant.now();
+	@CreationTimestamp(source = SourceType.DB)
+	private Instant created_At;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	@UpdateTimestamp(source = SourceType.DB)
 	private Instant updated_At;
 	
-	@ManyToOne
-	@JoinColumn(name = "printer_id")
-	private Printer printer;
 	
 	public Maintenance() {
 	
 	}
 
-	public Maintenance(Long id, @NotNull @NotEmpty(message = "Description is not empty") String text, Double price,
-			LocalDateTime maitenanceShippingDate, LocalDate endWarranty, Instant created_At, Instant updated_At,
-			Printer printer) {
-		
+	public Maintenance(Long id, MaintenanceOrder maintenanceOrder, Double totalValue, LocalDate maintenanceDate,
+			LocalDate endWarranty, Instant created_At, Instant updated_At) {
 		this.id = id;
-		this.text = text;
-		this.price = price;
-		this.maitenanceShippingDate = maitenanceShippingDate;
+		this.maintenanceOrder = maintenanceOrder;
+		this.totalValue = totalValue;
+		this.maintenanceDate = maintenanceDate;
 		this.endWarranty = endWarranty;
 		this.created_At = created_At;
 		this.updated_At = updated_At;
-		this.printer = printer;
 	}
 
 	public Long getId() {
@@ -76,28 +73,28 @@ public class Maintenance implements Serializable{
 		this.id = id;
 	}
 
-	public String getText() {
-		return text;
+	public MaintenanceOrder getMaintenanceOrder() {
+		return maintenanceOrder;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setMaintenanceOrder(MaintenanceOrder maintenanceOrder) {
+		this.maintenanceOrder = maintenanceOrder;
 	}
 
-	public Double getPrice() {
-		return price;
+	public Double getTotalValue() {
+		return totalValue;
 	}
 
-	public void setPrice(Double price) {
-		this.price = price;
+	public void setTotalValue(Double totalValue) {
+		this.totalValue = totalValue;
 	}
 
-	public LocalDateTime getMaitenanceShippingDate() {
-		return maitenanceShippingDate;
+	public LocalDate getMaintenanceDate() {
+		return maintenanceDate;
 	}
 
-	public void setMaitenanceShippingDate(LocalDateTime maitenanceShippingDate) {
-		this.maitenanceShippingDate = maitenanceShippingDate;
+	public void setMaintenanceDate(LocalDate maintenanceDate) {
+		this.maintenanceDate = maintenanceDate;
 	}
 
 	public LocalDate getEndWarranty() {
@@ -108,10 +105,6 @@ public class Maintenance implements Serializable{
 		this.endWarranty = endWarranty;
 	}
 
-	public Instant getCreated_At() {
-		return created_At;
-	}
-
 	public Instant getUpdated_At() {
 		return updated_At;
 	}
@@ -120,12 +113,8 @@ public class Maintenance implements Serializable{
 		this.updated_At = updated_At;
 	}
 
-	public Printer getPrinter() {
-		return printer;
-	}
-
-	public void setPrinter(Printer printer) {
-		this.printer = printer;
+	public Instant getCreated_At() {
+		return created_At;
 	}
 
 	@Override

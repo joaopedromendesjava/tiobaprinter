@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.tioba.printerbackend.dto.MaintenanceDTO;
+import com.tioba.printerbackend.dto.MaintenanceOrderDTO;
 import com.tioba.printerbackend.services.MaintenanceService;
 
 @RestController
@@ -26,35 +26,35 @@ public class MaintenanceResource {
 	private MaintenanceService maintenanceService;
 	
 	@GetMapping
-	public ResponseEntity<List<MaintenanceDTO>> allMaintenances(){
+	public ResponseEntity<List<MaintenanceOrderDTO>> allMaintenances(){
 		
-		List<MaintenanceDTO> maintenanceDTOs = maintenanceService.allMaintenances();
+		List<MaintenanceOrderDTO> maintenanceOrderDTOs = maintenanceService.allMaintenances();
 		
-		return ResponseEntity.ok().body(maintenanceDTOs);
+		return ResponseEntity.ok().body(maintenanceOrderDTOs);
 	}
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<MaintenanceDTO> getByIdMaintenance(@PathVariable(value = "id") Long id){
+	public ResponseEntity<MaintenanceOrderDTO> getByIdMaintenance(@PathVariable(value = "id") Long id){
 		
-		MaintenanceDTO maintenanceDTO = maintenanceService.getByIdMaintenance(id);
+		MaintenanceOrderDTO maintenanceOrderDTO = maintenanceService.getByIdMaintenance(id);
 		
-		return ResponseEntity.ok().body(maintenanceDTO);
+		return ResponseEntity.ok().body(maintenanceOrderDTO);
 	}
 	
 	@PostMapping
-	public ResponseEntity<MaintenanceDTO> saveMaintenance(@RequestBody MaintenanceDTO maintenanceDTO){
+	public ResponseEntity<MaintenanceOrderDTO> saveMaintenance(@RequestBody MaintenanceOrderDTO maintenanceOrderDTO){
 		
-		maintenanceDTO = maintenanceService.insertMaintenance(maintenanceDTO); 
+		maintenanceOrderDTO = maintenanceService.insertMaintenance(maintenanceOrderDTO); 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(maintenanceDTO.getId()).toUri();
+				.path("/{id}").buildAndExpand(maintenanceOrderDTO.getId()).toUri();
 		
-		return ResponseEntity.created(uri).body(maintenanceDTO);
+		return ResponseEntity.created(uri).body(maintenanceOrderDTO);
 		
 	}
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<MaintenanceDTO> updateMaintenanceId(@PathVariable(value = "id") Long id, @RequestBody MaintenanceDTO maintenanceDTO){
+	public ResponseEntity<MaintenanceOrderDTO> updateMaintenanceId(@PathVariable(value = "id") Long id, @RequestBody MaintenanceOrderDTO maintenanceOrderDTO){
 		
-		maintenanceDTO = maintenanceService.updateMaintenanceId(id, maintenanceDTO);
-		return ResponseEntity.ok().body(maintenanceDTO);
+		maintenanceOrderDTO = maintenanceService.updateMaintenanceId(id, maintenanceOrderDTO);
+		return ResponseEntity.ok().body(maintenanceOrderDTO);
 	}
 	
 	@DeleteMapping(path = "/{id}")

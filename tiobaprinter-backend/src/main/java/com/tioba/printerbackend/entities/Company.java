@@ -1,8 +1,8 @@
 package com.tioba.printerbackend.entities;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -30,7 +30,7 @@ public class Company {
 	private Instant created_At = Instant.now();
 	
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	private List<Department> departments = new ArrayList<>();
+	private Set<Department> departments = new HashSet<>();
 	
 	public Company() {
 	
@@ -75,7 +75,7 @@ public class Company {
 		this.created_At = created_At;
 	}
 	
-	public List<Department> getDepartments() {
+	public Set<Department> getDepartments() {
 		return departments;
 	}
 

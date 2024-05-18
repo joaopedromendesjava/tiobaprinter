@@ -15,7 +15,7 @@ public class DepartmentPrinter {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "department_id")
@@ -31,7 +31,7 @@ public class DepartmentPrinter {
 	
 	}
 
-	public DepartmentPrinter(Integer id, Department department, Printer printer, Integer status) {
+	public DepartmentPrinter(Long id, Department department, Printer printer, Integer status) {
 		this.id = id;
 		this.department = department;
 		this.printer = printer;
@@ -39,11 +39,11 @@ public class DepartmentPrinter {
 	}
 
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

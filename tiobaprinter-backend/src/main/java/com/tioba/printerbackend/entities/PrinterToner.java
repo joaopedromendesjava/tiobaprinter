@@ -1,6 +1,5 @@
 package com.tioba.printerbackend.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,7 +15,7 @@ public class PrinterToner {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "printer_id")
@@ -32,7 +31,7 @@ public class PrinterToner {
 	
 	}
 
-	public PrinterToner(Integer id, Printer printer, Toner toner, Integer status) {
+	public PrinterToner(Long id, Printer printer, Toner toner, Integer status) {
 		this.id = id;
 		this.printer = printer;
 		this.toner = toner;
@@ -40,11 +39,11 @@ public class PrinterToner {
 	}
 
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
